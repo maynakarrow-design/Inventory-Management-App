@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+
+    <apiVersion>59.0</apiVersion>
+
+    <environments>Default</environments>
+
+    <interviewLabel>Low Stock Notification {!$Flow.CurrentDateTime}</interviewLabel>
+
+    <label>Low Stock Notification</label>
+
+    <processType>AutoLaunchedFlow</processType>
+
+    
+
+    <actionCalls>
+
+        <name>Send_Low_Stock_Email</name>
+
+        <label>Send Low Stock Email</label>
+
+        <locationX>176</locationX>
+
+        <locationY>323</locationY>
+
+        <actionName>emailSimple</actionName>
+
+        <actionType>emailSimple</actionType>
+
+        <inputParameters>
+
+            <name>emailAddresses</name>
+
+            <value>
+
+                <stringValue>procurement@example.com</stringValue>
+
+            </value>
+
+        </inputParameters>
+
+        <inputParameters>
+
+            <name>emailSubject</name>
+
+            <value>
+
+                <stringValue>Low Stock Alert: {!$Record.Name}</stringValue>
+
+            </value>
+
+        </inputParameters>
+
+        <inputParameters>
+
+            <name>emailBody</name>
+
+            <value>
+
+                <stringValue>Action Required: The inventory for {!$Record.Name} has dropped below 50. Please initiate the reorder process.</stringValue>
+
+            </value>
+
+        </inputParameters>
+
+    </actionCalls>
+
+
+
+    <start>
+
+        <locationX>50</locationX>
+
+        <locationY>0</locationY>
+
+        <connector>
+
+            <targetReference>Send_Low_Stock_Email</targetReference>
+
+        </connector>
+
+        <filterLogic>and</filterLogic>
+
+        <filters>
+
+            <field>Available_Stock__c</field>
+
+            <operator>LessThan</operator>
+
+            <value>
+
+                <numberValue>50.0</numberValue>
+
+            </value>
+
+        </filters>
+
+        <object>Inventory_Item__c</object>
+
+        <recordTriggerType>CreateAndUpdate</recordTriggerType>
+
+        <triggerType>RecordAfterSave</triggerType>
+
+    </start>
+
+    <status>Active</status>
+
+</Flow>
